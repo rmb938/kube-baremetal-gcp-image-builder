@@ -1,0 +1,35 @@
+---
+- hosts: all
+  become: true
+  name: IMAGE BUILDER
+  tasks:
+    - name: UPGRADE ALL PACKAGES
+      yum:
+        name: '*'
+        state: latest
+
+    - name: INSTALL TOOLS
+      yum:
+        name:
+          - unzip
+          - git
+          - htop
+        state: present
+
+    - name: INSTALL ANSIBLE
+      yum:
+        name:
+          - ansible
+        state: present
+
+    - name: INSTALL QEMU KVM
+      yum:
+        name:
+          - qemu-kvm
+        state: present
+
+    - name: INSTALL PACKER
+      unarchive: 
+        remote_src: true
+        src: https://releases.hashicorp.com/packer/1.5.6/packer_1.5.6_linux_amd64.zip
+        dest: /usr/local/bin/

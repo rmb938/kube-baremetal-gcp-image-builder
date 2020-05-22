@@ -1,0 +1,39 @@
+{
+  "variables": {
+    "project_id": "rmb-lab",
+    "source_image_family": "centos-7",
+    "zone": "us-central1-a",
+    "subnetwork": "projects/rmb-lab/regions/us-central1/subnetworks/packer",
+    "image_name": "",
+    "image_family": "packer-test"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `project_id`}}",
+      "source_image_family": "{{user `source_image_family`}}",
+      "disk_size": "20",
+      "zone": "{{user `zone`}}",
+      "ssh_username": "cloud-user",
+      "subnetwork": "{{user `subnetwork`}}",
+      "preemptible": true,
+      "machine_type": "n2d-standard-2",
+      "image_family": "{{user `image_family`}}",
+      "image_licenses": [
+        "projects/vm-options/global/licenses/enable-vmx"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_RETRY_FILES_ENABLED=0"
+      ],
+      "extra_arguments": [
+        "-v"
+      ],
+      "playbook_file": "./ansible/site.yml"
+    }
+  ]
+}
